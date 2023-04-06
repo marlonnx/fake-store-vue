@@ -2,28 +2,36 @@ import { defineStore } from 'pinia'
 import type { Product } from '../models/product'
 import { getAllProducts } from '../services/products_service'
 import { AxiosError } from 'axios'
-import { computed, ref } from 'vue'
+import { computed, reactive } from 'vue'
+
+export interface ProductStoreState {
+  products: Product[]
+  loading: boolean
+  error?: string | null
+}
 
 export const useProductStore = defineStore('products', () => {
-  const products = ref<Product[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>()
+  const state = reactive<ProductStoreState>({
+    products: [],
+    loading: false,
+    error: null
+  })
 
-  const productsQuantity = computed(() => products.value.length)
+  const productsQuantity = computed(() => state.products.length)
 
   async function getProducts() {
     try {
-      error.value = null
-      loading.value = true
-      products.value = await getAllProducts({ limit: 25, offset: 25 })
-      loading.value = false
+      state.error = null
+      state.loading = true
+      state.products = await getAllProducts({ limit: 25, offset: 25 })
+      state.loading = false
     } catch (err) {
       if (err instanceof AxiosError) {
-        error.value = err.message ?? 'Erro ao buscar os produtos'
+        state.error = err.message ?? 'Erro ao buscar os produtos'
       } else {
-        error.value = 'Erro ao buscar os produtos'
+        state.error = 'Erro ao buscar os produtos'
       }
     }
   }
-  return { products, loading, error, productsQuantity, getProducts }
+  return { state, productsQuantity, getProducts }
 })
