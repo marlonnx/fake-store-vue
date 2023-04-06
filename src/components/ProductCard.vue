@@ -1,8 +1,8 @@
 <template>
-  <div class="card">
+  <div class="card" style="height: 300px;">
     <img
       class="card-img"
-      src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/vans.png"
+      :src="product.images[0]"
       alt="Vans"
     />
     <div class="card-img-overlay d-flex justify-content-end">
@@ -10,21 +10,23 @@
         <i class="fas fa-heart"></i>
       </a>
     </div>
-    <div class="card-body">
-      <h4 class="card-title">Vans Sk8-Hi MTE Shoes</h4>
-      <h6 class="card-subtitle mb-2 text-muted">Style: VA33TXRJ5</h6>
-      <p class="card-text">
-    
-      </p>
+    <div class="card-body d-flex flex-column">
+      <h5 class="card-title text-center">{{ product.title }}</h5>
 
-      <div class="buy d-flex justify-content-between align-items-center">
-        <div class="price text-success"><h5 class="mt-4">$125</h5></div>
-        <a href="#" class="btn btn-danger mt-3"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+      <div class="buy d-flex justify-content-between align-items-center mt-auto">
+        <div class="price text-success"><h5 class="mt-4">${{ product.price }}</h5></div>
+        <button class="btn btn-danger btn-sm mt-3"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { Product } from '../models/product'
+
+defineProps<{ product: Product }>()
+
+
+</script>
 
 <style scoped></style>
